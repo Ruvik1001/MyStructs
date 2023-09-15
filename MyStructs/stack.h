@@ -32,7 +32,7 @@ namespace MyStack {
 			if (this->data) {
 				for (size_t i = 0; i < count && i < capacity; i++)
 					ptr[i] = data[i];
-				delete data;
+				delete[] data;
 			}
 
 			this->capacity = capacity;
@@ -43,7 +43,7 @@ namespace MyStack {
 		}
 		void free() {
 			if (data)
-				delete data;
+				delete[] data;
 			capacity = count = 0;
 		}
 
@@ -131,6 +131,18 @@ namespace MyStack {
 
 			return *this;
 		}
+
+#ifdef DEBUG
+#include <iostream>
+#include <iomanip>
+		void show_info() {
+			std::cout << std::left << std::setw(12) <<
+				"Data: "	<< '|' << data << '\n' << std::left << std::setw(12) <<
+				"Size: "	<< '|' << count << '\n' << std::left << std::setw(12) <<
+				"Capacity: "	<< '|' << capacity << '\n';
+		}
+#endif // DEBUG
+
 	};
 
 }

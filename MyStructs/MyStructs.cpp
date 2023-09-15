@@ -1,4 +1,5 @@
-﻿#include "stack.h"
-#include <iostream>
+﻿#include <iostream> << _data 
+
 int main() {
+	
 }
