@@ -10,7 +10,6 @@
 #include <iomanip>
 #endif // DEBUG
 
-
 namespace MyVector {
 
 	template <typename Data>
@@ -20,7 +19,7 @@ namespace MyVector {
 		size_t _size = 0;
 		size_t _capacity = 0;
 
-		Data* reloc(size_t);
+		Data* reloc(size_t, Data** = nullptr);
 
 	public:
 		typedef Data* iterator;
@@ -88,7 +87,9 @@ namespace MyVector {
 
 
 	template<typename Data>
-	inline Data* Vector<Data>::reloc(size_t capacity) {
+	inline Data* Vector<Data>::reloc(size_t capacity, Data** it) {
+		size_t cur = (*it) - begin();
+
 		if (!capacity)
 			return nullptr;
 
@@ -107,8 +108,9 @@ namespace MyVector {
 		}
 
 		this->_capacity = capacity;
-		_size = _size < this->_capacity ? _size : _capacity;
-		_data = ptr;
+		_size			= _size < this->_capacity ? _size : _capacity;
+		_data			= ptr;
+		(*it)			= begin() + cur;
 
 		return _data;
 	}
@@ -201,7 +203,7 @@ namespace MyVector {
 
 	template<typename Data>
 	inline bool Vector<Data>::insert(iterator it, Data data) {
-		if (!it || it < begin() || it >= end() || _size == _capacity && !reloc(_capacity * 2))
+		if (!it || it < begin() || it > end() || _size == _capacity && !reloc(_capacity * 2, &it))
 			return false;
 
 		iterator ptr = end();
@@ -281,8 +283,10 @@ namespace MyVector {
 	template<typename Data>
 	template<typename ...Datas>
 	inline void Vector<Data>::insert(iterator it, Data data, Datas ... rest) {
+		if (_size == _capacity - 1)
+			reloc(_capacity * 2, &it);
 		insert(it++, data);
-		insert(it, rest);
+		insert(it, rest...);
 	}
 
 }

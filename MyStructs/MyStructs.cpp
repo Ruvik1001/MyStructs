@@ -1,5 +1,4 @@
-﻿#include <iostream> << _data 
+﻿#include <iostream>
 
 int main() {
-	
 }
